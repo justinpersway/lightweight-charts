@@ -114,7 +114,6 @@
     "yargs": "17.7.2"
   },
   "scripts": {
-    "postinstall": "npm run install-hooks",
     "install-hooks": "node scripts/githooks/install.js",
     "clean": "rimraf lib/ dist/",
     "bundle-dts": "dts-bundle-generator --config dts-config.json",
@@ -142,6 +141,7 @@
     "type-tests": "tsc -b ./src/tsconfig.composite.json && tsc -p ./tests/type-checks/tsconfig.composite.json --noEmit",
     "e2e:coverage": "esno ./tests/e2e/coverage/runner.ts ./dist/lightweight-charts.standalone.development.js",
     "e2e:interactions": "esno ./tests/e2e/interactions/runner.ts ./dist/lightweight-charts.standalone.development.js",
-    "e2e:memleaks": "esno ./tests/e2e/memleaks/runner.ts ./dist/lightweight-charts.standalone.development.js"
+    "e2e:memleaks": "esno ./tests/e2e/memleaks/runner.ts ./dist/lightweight-charts.standalone.development.js",
+    "prepare": "npm run build:prod"
   }
 }
