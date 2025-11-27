@@ -222,7 +222,8 @@ export class TrendLineRenderer implements IPrimitivePaneRenderer {
 
 		// Draw the line
 		ctx.save();
-		ctx.lineWidth = lineWidth;
+		// Scale line width by pixel ratio for consistency with built-in price lines
+		ctx.lineWidth = lineWidth * horizontalPixelRatio;
 		ctx.strokeStyle = lineColor;
 		setLineStyle(ctx, lineStyle);
 
