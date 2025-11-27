@@ -59,6 +59,10 @@ export { createTrendLine } from "./plugins/trend-line/wrapper";
 export type { ITrendLinePluginApi } from "./plugins/trend-line/wrapper";
 export type { TrendLineOptions } from "./plugins/trend-line/options";
 export type { TrendLinePoint } from "./plugins/trend-line/primitive";
+export { createHorizontalRay } from "./plugins/horizontal-ray/wrapper";
+export type { IHorizontalRayPluginApi } from "./plugins/horizontal-ray/wrapper";
+export type { HorizontalRayOptions } from "./plugins/horizontal-ray/options";
+export type { HorizontalRayAnchorPoint } from "./plugins/horizontal-ray/primitive";
 
 /**
  * Returns the current version as a string. For example `'3.3.0'`.
