@@ -63,6 +63,10 @@ export { createHorizontalRay } from "./plugins/horizontal-ray/wrapper";
 export type { IHorizontalRayPluginApi } from "./plugins/horizontal-ray/wrapper";
 export type { HorizontalRayOptions } from "./plugins/horizontal-ray/options";
 export type { HorizontalRayAnchorPoint } from "./plugins/horizontal-ray/primitive";
+export { createVerticalLine } from "./plugins/vertical-line/wrapper";
+export type { IVerticalLinePluginApi } from "./plugins/vertical-line/wrapper";
+export type { VerticalLineOptions } from "./plugins/vertical-line/options";
+export type { VerticalLinePoint } from "./plugins/vertical-line/primitive";
 
 /**
  * Returns the current version as a string. For example `'3.3.0'`.
