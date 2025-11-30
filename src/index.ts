@@ -67,6 +67,13 @@ export { createVerticalLine } from "./plugins/vertical-line/wrapper";
 export type { IVerticalLinePluginApi } from "./plugins/vertical-line/wrapper";
 export type { VerticalLineOptions } from "./plugins/vertical-line/options";
 export type { VerticalLinePoint } from "./plugins/vertical-line/primitive";
+export { createRectangle } from "./plugins/rectangle/wrapper";
+export type { IRectanglePluginApi } from "./plugins/rectangle/wrapper";
+export type {
+	RectangleOptions,
+	RectangleExtendMode,
+} from "./plugins/rectangle/options";
+export type { RectanglePoint } from "./plugins/rectangle/primitive";
 
 /**
  * Returns the current version as a string. For example `'3.3.0'`.

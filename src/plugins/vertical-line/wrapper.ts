@@ -103,4 +103,3 @@ export function createVerticalLine<HorzScaleItem>(
 		new VerticalLine<HorzScaleItem>(point, options)
 	);
 }
-

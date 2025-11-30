@@ -221,4 +221,3 @@ export function createVerticalLinePrimitive<HorzScaleItem = unknown>(
 ): VerticalLine<HorzScaleItem> {
 	return new VerticalLine<HorzScaleItem>(point, options);
 }
-

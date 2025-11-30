@@ -63,4 +63,3 @@ export const verticalLineOptionsDefaults: VerticalLineOptions = {
 	selected: false,
 	timeframe: "1d",
 };
-

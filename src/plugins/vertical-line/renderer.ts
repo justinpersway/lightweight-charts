@@ -172,4 +172,3 @@ export class VerticalLineRenderer implements IPrimitivePaneRenderer {
 		ctx.restore();
 	}
 }
-

@@ -19,4 +19,3 @@ export class VerticalLinePaneView implements IPrimitivePaneView {
 		return "normal";
 	}
 }
-
