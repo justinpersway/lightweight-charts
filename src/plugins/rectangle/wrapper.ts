@@ -137,4 +137,3 @@ export function createRectangle<HorzScaleItem>(
 		new Rectangle<HorzScaleItem>(p1, p2, options)
 	);
 }
-

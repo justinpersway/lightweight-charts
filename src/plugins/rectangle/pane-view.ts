@@ -22,4 +22,3 @@ export class RectanglePaneView implements IPrimitivePaneView {
 		return "bottom";
 	}
 }
-
