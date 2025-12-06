@@ -34,6 +34,12 @@ export interface HorizontalRayRendererData {
 
 const HIT_TEST_TOLERANCE = 6;
 
+/**
+ * Anchor point hit test radius in pixels - size of clickable area around anchor points
+ * Slightly larger than visual radius (5px) for easier clicking
+ */
+const ANCHOR_HIT_RADIUS = 8;
+
 function distanceToLineSegment(
 	px: number,
 	py: number,
@@ -81,7 +87,7 @@ export class HorizontalRayRenderer implements IPrimitivePaneRenderer {
 			return null;
 		}
 
-		const { anchor, endPoint, externalId } = this._data;
+		const { anchor, endPoint, externalId, selected } = this._data;
 		if (
 			anchor.x === null ||
 			anchor.y === null ||
@@ -89,6 +95,20 @@ export class HorizontalRayRenderer implements IPrimitivePaneRenderer {
 			endPoint.y === null
 		) {
 			return null;
+		}
+
+		// When selected, check anchor point first (higher priority than line)
+		if (selected) {
+			const anchorResult = this._hitTestAnchorPoint(
+				x,
+				y,
+				anchor.x,
+				anchor.y,
+				externalId
+			);
+			if (anchorResult) {
+				return anchorResult;
+			}
 		}
 
 		const distance = distanceToLineSegment(
@@ -120,6 +140,30 @@ export class HorizontalRayRenderer implements IPrimitivePaneRenderer {
 			};
 		}
 
+		return null;
+	}
+
+	/**
+	 * Test if the given point hits the anchor point.
+	 * Returns a PrimitiveHoveredItem with anchor index encoded in externalId if hit.
+	 */
+	private _hitTestAnchorPoint(
+		x: number,
+		y: number,
+		anchorX: number,
+		anchorY: number,
+		externalId: string
+	): PrimitiveHoveredItem | null {
+		const dist = Math.sqrt(
+			(x - anchorX) * (x - anchorX) + (y - anchorY) * (y - anchorY)
+		);
+		if (dist <= ANCHOR_HIT_RADIUS) {
+			return {
+				cursorStyle: "grab",
+				externalId: `${externalId}:anchor:0`,
+				zOrder: "normal",
+			};
+		}
 		return null;
 	}
 
