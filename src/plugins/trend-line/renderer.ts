@@ -60,6 +60,12 @@ export interface TrendLineRendererData {
 const HIT_TEST_TOLERANCE = 6;
 
 /**
+ * Anchor point hit test radius in pixels - size of clickable area around anchor points
+ * Slightly larger than visual radius (5px) for easier clicking
+ */
+const ANCHOR_HIT_RADIUS = 8;
+
+/**
  * Calculate the distance from a point to a line segment
  */
 function distanceToLineSegment(
@@ -112,10 +118,25 @@ export class TrendLineRenderer implements IPrimitivePaneRenderer {
 			return null;
 		}
 
-		const { extendToEdges, p1, p2, extendedStart, extendedEnd, externalId } =
-			this._data;
+		const {
+			extendToEdges,
+			p1,
+			p2,
+			extendedStart,
+			extendedEnd,
+			externalId,
+			selected,
+		} = this._data;
 
-		// Determine which points to use for hit testing
+		// When selected, check anchor points first (higher priority than line)
+		if (selected) {
+			const anchorResult = this._hitTestAnchorPoints(x, y, p1, p2, externalId);
+			if (anchorResult) {
+				return anchorResult;
+			}
+		}
+
+		// Determine which points to use for hit testing the line
 		let lineX1: number | null;
 		let lineY1: number | null;
 		let lineX2: number | null;
@@ -157,6 +178,48 @@ export class TrendLineRenderer implements IPrimitivePaneRenderer {
 				externalId: externalId,
 				zOrder: "normal",
 			};
+		}
+
+		return null;
+	}
+
+	/**
+	 * Test if the given point hits one of the anchor points.
+	 * Returns a PrimitiveHoveredItem with anchor index encoded in externalId if hit.
+	 */
+	private _hitTestAnchorPoints(
+		x: number,
+		y: number,
+		p1: TrendLineRendererPoint,
+		p2: TrendLineRendererPoint,
+		externalId: string
+	): PrimitiveHoveredItem | null {
+		// Check anchor point 1 (start)
+		if (p1.x !== null && p1.y !== null) {
+			const distToP1 = Math.sqrt(
+				(x - p1.x) * (x - p1.x) + (y - p1.y) * (y - p1.y)
+			);
+			if (distToP1 <= ANCHOR_HIT_RADIUS) {
+				return {
+					cursorStyle: "grab",
+					externalId: `${externalId}:anchor:0`,
+					zOrder: "normal",
+				};
+			}
+		}
+
+		// Check anchor point 2 (end)
+		if (p2.x !== null && p2.y !== null) {
+			const distToP2 = Math.sqrt(
+				(x - p2.x) * (x - p2.x) + (y - p2.y) * (y - p2.y)
+			);
+			if (distToP2 <= ANCHOR_HIT_RADIUS) {
+				return {
+					cursorStyle: "grab",
+					externalId: `${externalId}:anchor:1`,
+					zOrder: "normal",
+				};
+			}
 		}
 
 		return null;
