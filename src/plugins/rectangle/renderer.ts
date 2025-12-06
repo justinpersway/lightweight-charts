@@ -314,7 +314,7 @@ export class RectangleRenderer implements IPrimitivePaneRenderer {
 			);
 		}
 
-		// Draw anchor point indicators when selected
+		// Draw anchor point indicators when selected (only the 2 defining corners)
 		if (
 			selected &&
 			p1.x !== null &&
@@ -327,7 +327,7 @@ export class RectangleRenderer implements IPrimitivePaneRenderer {
 			const p2XScaled = Math.round(p2.x * horizontalPixelRatio);
 			const p2YScaled = Math.round(p2.y * verticalPixelRatio);
 
-			// Draw all four corners
+			// Draw only the two defining corners (p1 and p2)
 			this._drawAnchorPoint(
 				ctx,
 				p1XScaled,
@@ -339,53 +339,6 @@ export class RectangleRenderer implements IPrimitivePaneRenderer {
 				ctx,
 				p2XScaled,
 				p2YScaled,
-				anchorPointColor,
-				horizontalPixelRatio
-			);
-			this._drawAnchorPoint(
-				ctx,
-				p1XScaled,
-				p2YScaled,
-				anchorPointColor,
-				horizontalPixelRatio
-			);
-			this._drawAnchorPoint(
-				ctx,
-				p2XScaled,
-				p1YScaled,
-				anchorPointColor,
-				horizontalPixelRatio
-			);
-
-			// Draw midpoint handles on each edge
-			const midX = (p1XScaled + p2XScaled) / 2;
-			const midY = (p1YScaled + p2YScaled) / 2;
-
-			this._drawAnchorPoint(
-				ctx,
-				midX,
-				p1YScaled,
-				anchorPointColor,
-				horizontalPixelRatio
-			);
-			this._drawAnchorPoint(
-				ctx,
-				midX,
-				p2YScaled,
-				anchorPointColor,
-				horizontalPixelRatio
-			);
-			this._drawAnchorPoint(
-				ctx,
-				p1XScaled,
-				midY,
-				anchorPointColor,
-				horizontalPixelRatio
-			);
-			this._drawAnchorPoint(
-				ctx,
-				p2XScaled,
-				midY,
 				anchorPointColor,
 				horizontalPixelRatio
 			);
