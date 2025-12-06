@@ -74,6 +74,9 @@ export type {
 	RectangleExtendMode,
 } from "./plugins/rectangle/options";
 export type { RectanglePoint } from "./plugins/rectangle/primitive";
+export { createHorizontalLinePrimitive } from "./plugins/horizontal-line/wrapper";
+export type { IHorizontalLinePluginApi } from "./plugins/horizontal-line/wrapper";
+export type { HorizontalLineOptions } from "./plugins/horizontal-line/options";
 
 /**
  * Returns the current version as a string. For example `'3.3.0'`.
