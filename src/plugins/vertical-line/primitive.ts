@@ -208,6 +208,8 @@ export class VerticalLine<HorzScaleItem = unknown>
 			chartWidth: timeScale.width(),
 			chartHeight: series.getPane().getHeight(),
 			selected: this._options.selected,
+			anchorPointColor: this._options.anchorPointColor,
+			anchorOffsetFromBottom: this._options.anchorOffsetFromBottom,
 		};
 	}
 }

@@ -50,6 +50,16 @@ export interface VerticalLineOptions {
 	 * - "1d" or other: date only (e.g., "Mon 21 Jul '25")
 	 */
 	timeframe: string;
+
+	/**
+	 * Color of the anchor point indicator when selected.
+	 */
+	anchorPointColor: string;
+
+	/**
+	 * Offset from bottom edge of chart for the anchor point (in pixels).
+	 */
+	anchorOffsetFromBottom: number;
 }
 
 export const verticalLineOptionsDefaults: VerticalLineOptions = {
@@ -62,4 +72,6 @@ export const verticalLineOptionsDefaults: VerticalLineOptions = {
 	externalId: "",
 	selected: false,
 	timeframe: "1d",
+	anchorPointColor: "#2962ff",
+	anchorOffsetFromBottom: 50,
 };

@@ -23,9 +23,18 @@ export interface VerticalLineRendererData {
 	chartWidth: number;
 	chartHeight: number;
 	selected: boolean;
+	/** Color of the anchor point */
+	anchorPointColor: string;
+	/** Distance from bottom edge for anchor point */
+	anchorOffsetFromBottom: number;
 }
 
 const HIT_TEST_TOLERANCE = 6;
+/**
+ * Anchor point hit test radius in pixels - size of clickable area around anchor points
+ * Slightly larger than visual radius (5px) for easier clicking
+ */
+const ANCHOR_HIT_RADIUS = 8;
 const LABEL_PADDING_X = 6;
 const LABEL_PADDING_Y = 4;
 const LABEL_FONT_SIZE = 11;
@@ -46,21 +55,68 @@ export class VerticalLineRenderer implements IPrimitivePaneRenderer {
 		);
 	}
 
-	public hitTest(x: number, _y: number): PrimitiveHoveredItem | null {
+	public hitTest(x: number, y: number): PrimitiveHoveredItem | null {
 		if (!this._data || this._data.x === null) {
 			return null;
 		}
 
-		const distance = Math.abs(x - this._data.x);
+		const {
+			x: lineX,
+			externalId,
+			chartHeight,
+			selected,
+			anchorOffsetFromBottom,
+		} = this._data;
 
+		// When selected, check anchor point first (higher priority than line)
+		if (selected) {
+			const anchorY = chartHeight - anchorOffsetFromBottom;
+			const anchorResult = this._hitTestAnchorPoint(
+				x,
+				y,
+				lineX,
+				anchorY,
+				externalId
+			);
+			if (anchorResult) {
+				return anchorResult;
+			}
+		}
+
+		// Check if cursor is near the vertical line
+		const distance = Math.abs(x - lineX);
 		if (distance <= HIT_TEST_TOLERANCE) {
 			return {
 				cursorStyle: "pointer",
-				externalId: this._data.externalId,
+				externalId,
 				zOrder: "normal",
 			};
 		}
 
+		return null;
+	}
+
+	/**
+	 * Test if the given point hits the anchor point.
+	 * Returns a PrimitiveHoveredItem with anchor index encoded in externalId if hit.
+	 */
+	private _hitTestAnchorPoint(
+		x: number,
+		y: number,
+		anchorX: number,
+		anchorY: number,
+		externalId: string
+	): PrimitiveHoveredItem | null {
+		const dist = Math.sqrt(
+			(x - anchorX) * (x - anchorX) + (y - anchorY) * (y - anchorY)
+		);
+		if (dist <= ANCHOR_HIT_RADIUS) {
+			return {
+				cursorStyle: "grab",
+				externalId: `${externalId}:anchor:0`,
+				zOrder: "normal",
+			};
+		}
 		return null;
 	}
 
@@ -79,6 +135,9 @@ export class VerticalLineRenderer implements IPrimitivePaneRenderer {
 			timeLabel,
 			labelBackgroundColor,
 			labelTextColor,
+			selected,
+			anchorPointColor,
+			anchorOffsetFromBottom,
 		} = this._data;
 
 		const ctx = scope.context;
@@ -113,6 +172,19 @@ export class VerticalLineRenderer implements IPrimitivePaneRenderer {
 				lineColor,
 				hRatio,
 				vRatio
+			);
+		}
+
+		// Draw anchor point indicator when selected
+		if (selected) {
+			const anchorY = chartHeight - anchorOffsetFromBottom;
+			const anchorYScaled = Math.round(anchorY * vRatio);
+			this._drawAnchorPoint(
+				ctx,
+				scaledX,
+				anchorYScaled,
+				anchorPointColor,
+				hRatio
 			);
 		}
 	}
@@ -170,5 +242,29 @@ export class VerticalLineRenderer implements IPrimitivePaneRenderer {
 		ctx.textBaseline = "middle";
 		ctx.fillText(label, x, boxY + boxHeight / 2);
 		ctx.restore();
+	}
+
+	private _drawAnchorPoint(
+		ctx: CanvasRenderingContext2D,
+		x: number,
+		y: number,
+		color: string,
+		pixelRatio: number
+	): void {
+		const radius = 5 * pixelRatio;
+		const borderWidth = 2 * pixelRatio;
+
+		// Draw outer circle (border)
+		ctx.beginPath();
+		ctx.arc(x, y, radius, 0, 2 * Math.PI);
+		ctx.strokeStyle = color;
+		ctx.lineWidth = borderWidth;
+		ctx.stroke();
+
+		// Draw inner fill (transparent/dark center)
+		ctx.beginPath();
+		ctx.arc(x, y, radius - borderWidth / 2, 0, 2 * Math.PI);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+		ctx.fill();
 	}
 }
