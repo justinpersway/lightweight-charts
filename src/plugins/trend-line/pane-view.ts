@@ -16,6 +16,6 @@ export class TrendLinePaneView implements IPrimitivePaneView {
 	}
 
 	public zOrder(): PrimitivePaneViewZOrder {
-		return "normal";
+		return "bottom";
 	}
 }

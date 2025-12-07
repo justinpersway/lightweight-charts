@@ -17,6 +17,6 @@ export class HorizontalLinePaneView implements IPrimitivePaneView {
 	}
 
 	public zOrder(): PrimitivePaneViewZOrder {
-		return "normal";
+		return "bottom";
 	}
 }

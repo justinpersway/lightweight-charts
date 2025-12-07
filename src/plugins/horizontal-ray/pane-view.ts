@@ -17,6 +17,6 @@ export class HorizontalRayPaneView implements IPrimitivePaneView {
 	}
 
 	public zOrder(): PrimitivePaneViewZOrder {
-		return "normal";
+		return "bottom";
 	}
 }
