@@ -415,10 +415,10 @@ export class LongPositionRenderer implements IPrimitivePaneRenderer {
 		// Draw labels
 		// For long: target is above entry, stop is below
 		// For short: target is below entry, stop is above
-		const targetText = `Target: ${targetDelta.toFixed(2)} (${targetPct.toFixed(
+		const targetText = `Target: ${targetPrice.toFixed(0)} (${targetPct.toFixed(
 			2
 		)}%)`;
-		const stopText = `Stop: ${stopDelta.toFixed(2)} (${stopPct.toFixed(2)}%)`;
+		const stopText = `Stop: ${stopPrice.toFixed(0)} (${stopPct.toFixed(2)}%)`;
 
 		if (direction === "long") {
 			// Long: target label above targetY, stop label below stopY
@@ -464,8 +464,10 @@ export class LongPositionRenderer implements IPrimitivePaneRenderer {
 			);
 		}
 
-		// Risk/Reward label (center, near entry line)
-		const rrText = `Risk/Reward: ${riskRewardRatio.toFixed(2)}`;
+		// Entry and Risk/Reward label (center, near entry line)
+		const rrText = `Entry: ${entryPrice.toFixed(
+			0
+		)} | Risk/Reward: ${riskRewardRatio.toFixed(2)}`;
 		this._drawLabel(
 			scope,
 			rrText,
