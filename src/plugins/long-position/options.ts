@@ -1,9 +1,22 @@
 import { LineStyle, LineWidth } from "../../renderers/draw-line";
 
 /**
+ * Direction of the position (long or short).
+ * - "long": profit zone above entry, risk zone below (target > entry > stop)
+ * - "short": profit zone below entry, risk zone above (stop > entry > target)
+ */
+export type PositionDirection = "long" | "short";
+
+/**
  * Options for the Long Position primitive.
  */
 export interface LongPositionOptions {
+	/**
+	 * Direction of the position.
+	 * @default "long"
+	 */
+	direction: PositionDirection;
+
 	/**
 	 * Border line color.
 	 */
@@ -72,6 +85,7 @@ export interface LongPositionOptions {
 }
 
 export const longPositionOptionsDefaults: LongPositionOptions = {
+	direction: "long",
 	lineColor: "#ffffff",
 	lineWidth: 1,
 	lineStyle: LineStyle.Solid,

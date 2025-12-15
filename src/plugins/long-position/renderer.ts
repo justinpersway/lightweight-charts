@@ -10,6 +10,8 @@ import {
 } from "../../model/ipane-primitive";
 import { LineStyle, setLineStyle } from "../../renderers/draw-line";
 
+import { PositionDirection } from "./options";
+
 export interface LongPositionRendererPoint {
 	x: Coordinate | null;
 	y: Coordinate | null;
@@ -60,6 +62,8 @@ export interface LongPositionRendererData {
 	targetLabelBackgroundColor: string;
 	/** Stop label background color */
 	stopLabelBackgroundColor: string;
+	/** Direction of the position (long or short) */
+	direction: PositionDirection;
 }
 
 /**
@@ -385,39 +389,80 @@ export class LongPositionRenderer implements IPrimitivePaneRenderer {
 		ctx.stroke();
 		ctx.restore();
 
-		// Calculate percentages and risk/reward
-		const targetPct = ((targetPrice - entryPrice) / entryPrice) * 100;
-		const stopPct = ((entryPrice - stopPrice) / entryPrice) * 100;
-		const targetDelta = targetPrice - entryPrice;
-		const stopDelta = entryPrice - stopPrice;
+		// Calculate percentages and risk/reward based on direction
+		const direction = this._data.direction;
+		let targetDelta: number;
+		let stopDelta: number;
+		let targetPct: number;
+		let stopPct: number;
+
+		if (direction === "long") {
+			// Long: profit when price goes up (target > entry), loss when price goes down (stop < entry)
+			targetDelta = targetPrice - entryPrice;
+			stopDelta = entryPrice - stopPrice;
+			targetPct = (targetDelta / entryPrice) * 100;
+			stopPct = (stopDelta / entryPrice) * 100;
+		} else {
+			// Short: profit when price goes down (target < entry), loss when price goes up (stop > entry)
+			targetDelta = entryPrice - targetPrice;
+			stopDelta = stopPrice - entryPrice;
+			targetPct = (targetDelta / entryPrice) * 100;
+			stopPct = (stopDelta / entryPrice) * 100;
+		}
+
 		const riskRewardRatio = stopDelta !== 0 ? targetDelta / stopDelta : 0;
 
 		// Draw labels
-		// Target label (top)
+		// For long: target is above entry, stop is below
+		// For short: target is below entry, stop is above
 		const targetText = `Target: ${targetDelta.toFixed(2)} (${targetPct.toFixed(
 			2
 		)}%)`;
-		this._drawLabel(
-			scope,
-			targetText,
-			leftScaled + rectWidth / 2,
-			targetYScaled - 8 * verticalPixelRatio,
-			targetLabelBackgroundColor,
-			labelTextColor,
-			"bottom"
-		);
-
-		// Stop label (bottom)
 		const stopText = `Stop: ${stopDelta.toFixed(2)} (${stopPct.toFixed(2)}%)`;
-		this._drawLabel(
-			scope,
-			stopText,
-			leftScaled + rectWidth / 2,
-			stopYScaled + 8 * verticalPixelRatio,
-			stopLabelBackgroundColor,
-			labelTextColor,
-			"top"
-		);
+
+		if (direction === "long") {
+			// Long: target label above targetY, stop label below stopY
+			this._drawLabel(
+				scope,
+				targetText,
+				leftScaled + rectWidth / 2,
+				targetYScaled - 8 * verticalPixelRatio,
+				targetLabelBackgroundColor,
+				labelTextColor,
+				"bottom"
+			);
+
+			this._drawLabel(
+				scope,
+				stopText,
+				leftScaled + rectWidth / 2,
+				stopYScaled + 8 * verticalPixelRatio,
+				stopLabelBackgroundColor,
+				labelTextColor,
+				"top"
+			);
+		} else {
+			// Short: target label below targetY (target is below entry), stop label above stopY (stop is above entry)
+			this._drawLabel(
+				scope,
+				targetText,
+				leftScaled + rectWidth / 2,
+				targetYScaled + 8 * verticalPixelRatio,
+				targetLabelBackgroundColor,
+				labelTextColor,
+				"top"
+			);
+
+			this._drawLabel(
+				scope,
+				stopText,
+				leftScaled + rectWidth / 2,
+				stopYScaled - 8 * verticalPixelRatio,
+				stopLabelBackgroundColor,
+				labelTextColor,
+				"bottom"
+			);
+		}
 
 		// Risk/Reward label (center, near entry line)
 		const rrText = `Risk/Reward: ${riskRewardRatio.toFixed(2)}`;

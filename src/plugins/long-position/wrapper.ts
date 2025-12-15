@@ -169,3 +169,56 @@ export function createLongPosition<HorzScaleItem>(
 		new LongPosition<HorzScaleItem>(data, options)
 	);
 }
+
+/**
+ * Type alias for Short Position plugin API (same interface as Long Position).
+ */
+export type IShortPositionPluginApi<HorzScaleItem> =
+	ILongPositionPluginApi<HorzScaleItem>;
+
+/**
+ * Creates a Short Position primitive that draws a risk/reward rectangle with entry, target, and stop levels.
+ * For short positions: target is below entry (profit zone), stop is above entry (risk zone).
+ *
+ * @param series - The series to which the primitive will be attached.
+ * @param data - The data for the short position.
+ * @param options - Optional configuration for the drawing.
+ *
+ * @example
+ * ```js
+ * import { createShortPosition } from 'lightweight-charts';
+ *
+ * const shortPosition = createShortPosition(
+ *   series,
+ *   {
+ *     entryTime: 1556880900,
+ *     entryPrice: 100,
+ *     targetPrice: 80,    // Below entry for shorts
+ *     stopPrice: 110,     // Above entry for shorts
+ *     widthBars: 20,
+ *   },
+ *   {
+ *     externalId: 'my-short-position',
+ *   }
+ * );
+ *
+ * // Update the data
+ * shortPosition.setData({ targetPrice: 75 });
+ *
+ * // Update options
+ * shortPosition.applyOptions({ selected: true });
+ *
+ * // Detach when done
+ * shortPosition.detach();
+ * ```
+ */
+export function createShortPosition<HorzScaleItem>(
+	series: ISeriesApi<SeriesType, HorzScaleItem>,
+	data: LongPositionData,
+	options?: DeepPartial<LongPositionOptions>
+): IShortPositionPluginApi<HorzScaleItem> {
+	return new LongPositionPrimitiveWrapper(
+		series,
+		new LongPosition<HorzScaleItem>(data, { ...options, direction: "short" })
+	);
+}

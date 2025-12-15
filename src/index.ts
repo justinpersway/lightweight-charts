@@ -77,9 +77,18 @@ export type { RectanglePoint } from "./plugins/rectangle/primitive";
 export { createHorizontalLinePrimitive } from "./plugins/horizontal-line/wrapper";
 export type { IHorizontalLinePluginApi } from "./plugins/horizontal-line/wrapper";
 export type { HorizontalLineOptions } from "./plugins/horizontal-line/options";
-export { createLongPosition } from "./plugins/long-position/wrapper";
-export type { ILongPositionPluginApi } from "./plugins/long-position/wrapper";
-export type { LongPositionOptions } from "./plugins/long-position/options";
+export {
+	createLongPosition,
+	createShortPosition,
+} from "./plugins/long-position/wrapper";
+export type {
+	ILongPositionPluginApi,
+	IShortPositionPluginApi,
+} from "./plugins/long-position/wrapper";
+export type {
+	LongPositionOptions,
+	PositionDirection,
+} from "./plugins/long-position/options";
 export type { LongPositionData } from "./plugins/long-position/primitive";
 
 /**

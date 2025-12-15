@@ -303,6 +303,7 @@ export class LongPosition<HorzScaleItem = unknown>
 			labelTextColor: this._options.labelTextColor,
 			targetLabelBackgroundColor: this._options.targetLabelBackgroundColor,
 			stopLabelBackgroundColor: this._options.stopLabelBackgroundColor,
+			direction: this._options.direction,
 		};
 	}
 }
