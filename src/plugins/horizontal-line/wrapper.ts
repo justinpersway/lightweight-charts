@@ -103,3 +103,4 @@ export function createHorizontalLinePrimitive<HorzScaleItem>(
 		new HorizontalLine<HorzScaleItem>(price, options)
 	);
 }
+

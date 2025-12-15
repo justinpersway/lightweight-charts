@@ -77,6 +77,10 @@ export type { RectanglePoint } from "./plugins/rectangle/primitive";
 export { createHorizontalLinePrimitive } from "./plugins/horizontal-line/wrapper";
 export type { IHorizontalLinePluginApi } from "./plugins/horizontal-line/wrapper";
 export type { HorizontalLineOptions } from "./plugins/horizontal-line/options";
+export { createLongPosition } from "./plugins/long-position/wrapper";
+export type { ILongPositionPluginApi } from "./plugins/long-position/wrapper";
+export type { LongPositionOptions } from "./plugins/long-position/options";
+export type { LongPositionData } from "./plugins/long-position/primitive";
 
 /**
  * Returns the current version as a string. For example `'3.3.0'`.

@@ -166,3 +166,4 @@ export function createHorizontalLinePrimitive<HorzScaleItem = unknown>(
 ): HorizontalLine<HorzScaleItem> {
 	return new HorizontalLine<HorzScaleItem>(price, options);
 }
+

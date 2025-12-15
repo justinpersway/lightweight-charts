@@ -56,3 +56,4 @@ export const horizontalLineOptionsDefaults: HorizontalLineOptions = {
 	anchorPointColor: "#2962ff",
 	anchorOffsetFromRight: 50,
 };
+

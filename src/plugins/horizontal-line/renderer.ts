@@ -201,3 +201,4 @@ export class HorizontalLineRenderer implements IPrimitivePaneRenderer {
 		ctx.fill();
 	}
 }
+
