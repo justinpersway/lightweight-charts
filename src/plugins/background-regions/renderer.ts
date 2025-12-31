@@ -61,11 +61,7 @@ export class BackgroundRegionsRenderer implements IPrimitivePaneRenderer {
 		let batchEndX: number | null = null;
 
 		const drawBatch = (): void => {
-			if (
-				currentColor !== null &&
-				batchStartX !== null &&
-				batchEndX !== null
-			) {
+			if (currentColor !== null && batchStartX !== null && batchEndX !== null) {
 				ctx.fillStyle = currentColor;
 				ctx.fillRect(
 					batchStartX,
@@ -78,14 +74,16 @@ export class BackgroundRegionsRenderer implements IPrimitivePaneRenderer {
 
 		for (const region of this._data.regions) {
 			const halfBarWidth = (region.barWidth * horizontalPixelRatio) / 2;
-			const leftX = Math.round(
-				region.x * horizontalPixelRatio - halfBarWidth
-			);
-			const rightX = Math.round(
-				region.x * horizontalPixelRatio + halfBarWidth
-			);
+			const leftX = Math.round(region.x * horizontalPixelRatio - halfBarWidth);
+			const rightX = Math.round(region.x * horizontalPixelRatio + halfBarWidth);
 
-			if (region.color === currentColor && batchEndX !== null) {
+			// Only batch if same color AND regions are actually adjacent (within 1.5 bar widths)
+			// This prevents drawing a single rectangle across gaps where noise candles exist
+			const barWidthScaled = region.barWidth * horizontalPixelRatio;
+			const isAdjacent =
+				batchEndX !== null && leftX <= batchEndX + barWidthScaled * 0.5;
+
+			if (region.color === currentColor && isAdjacent) {
 				// Extend current batch
 				batchEndX = rightX;
 			} else {
@@ -101,4 +99,3 @@ export class BackgroundRegionsRenderer implements IPrimitivePaneRenderer {
 		drawBatch();
 	}
 }
-
