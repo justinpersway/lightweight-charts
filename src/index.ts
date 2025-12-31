@@ -90,6 +90,12 @@ export type {
 	PositionDirection,
 } from "./plugins/long-position/options";
 export type { LongPositionData } from "./plugins/long-position/primitive";
+export { createBackgroundRegions } from "./plugins/background-regions/wrapper";
+export type { IBackgroundRegionsPluginApi } from "./plugins/background-regions/wrapper";
+export type {
+	BackgroundRegionData,
+	BackgroundRegionsOptions,
+} from "./plugins/background-regions/options";
 
 /**
  * Returns the current version as a string. For example `'3.3.0'`.
